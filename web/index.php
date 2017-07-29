@@ -1,11 +1,12 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'./../vendor/autoload.php'
 
 $app = new Silex\Application();
 
-$app->get('/', function(){
-	return 'hello world';
-});
+// Enable the debug mode
+$app['debug'] = true;
+
+require __DIR__.'/../app/routes.php';
 
 $app->run();
