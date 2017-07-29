@@ -1,6 +1,12 @@
 <?php
 
+// Home page
+$app->get('/', function () {
+    //require '../src/model.php';
+    //$articles = getArticles();
 
-$app->get('/', function(){
-	return 'hello world';
+    ob_start();             // start buffering HTML output
+    require '../views/home.php';
+    $view = ob_get_clean(); // assign HTML output to $view
+    return $view;
 });
