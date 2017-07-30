@@ -1,6 +1,6 @@
 <?php
 
-namespace api_EverydayDrinking\BDD\Entity\Entity;
+namespace everydayDrinking\BDD\Entity;
 
 class Location
 {
