@@ -1,6 +1,8 @@
 <?php
 
-class location
+namespace api_EverydayDrinking\BDD\Entity\Entity;
+
+class Location
 {
     private $id;
     private $longitude;

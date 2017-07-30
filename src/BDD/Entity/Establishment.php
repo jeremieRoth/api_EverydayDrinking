@@ -1,11 +1,27 @@
 <?php
 
-class drink
+namespace everydayDrinking\BDD\Entity;
+
+class Establishment
 {
+    /**
+    *Establishment id
+    *
+    *@var integer
+    */
     private $id;
+  /**
+    * Establishment name
+    *
+    *@var String
+    */
     private $name;
-    private $price;
-    private $etablishment;
+  /**
+    * Establishment location
+    *
+    *@var Location
+    */
+    private $location;
 
     public function __construct(){}
 
@@ -29,25 +45,16 @@ class drink
         return $this;
     }
 
-        public function getPrice()
+    public function getLocation()
     {
-        return $this->price;
+        return $this->location;
     }
-    public function setPrice($price)
+    public function setLocation($location)
     {
-        $this->price = $price;
+        $this->location = $location;
         return $this;
     }
 
-        public function getEtablishement()
-    {
-        return $this->etablishement;
-    }
-    public function setEtablishement($etablishement)
-    {
-        $this->etablishement = $etablishement;
-        return $this;
-    }
 
 
 }

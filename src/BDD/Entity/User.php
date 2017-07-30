@@ -1,6 +1,8 @@
 <?php
 
-class user
+namespace everydayDrinking\BDD\Entity;
+
+class User
 {
     private $id;
     private $login;

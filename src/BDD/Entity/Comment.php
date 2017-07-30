@@ -1,12 +1,14 @@
 <?php
 
-class comment
+namespace everydayDrinking\BDD\Entity;
+
+class Comment
 {
     private $id;
     private $user;
     private $comment;
     private $score;
-    private $etablishement;
+    private $establishement;
 
     public function __construct(){}
 

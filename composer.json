@@ -2,6 +2,9 @@
 	"require":{
 		"silex/silex": "2.*",
 		"doctrine/dbal": "~2.2"
-	}
+	},
+	"autoload" : {
+        "psr-4": {"everydayDrinking\\": "src"}
+    }
 
 }
