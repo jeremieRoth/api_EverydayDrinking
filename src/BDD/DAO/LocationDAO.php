@@ -2,11 +2,11 @@
 
 namespace everydayDrinking\BDD\DAO;
 
-use everydayDrinking\BDD\Entity\Establishment;
+use everydayDrinking\BDD\Entity\Location;
 
 use Doctrine\DBAL\Connection;
 
-class EstablishmentDAO
+class LocationDAO
 {
 	private $db;
 
@@ -50,8 +50,7 @@ class EstablishmentDAO
 	{
 		$locationData = array(
 			'longitude' => $location->getLongitude(),
-			'latitude' => $location->getLatitude(),
-			'establishment' => $location->getEstablishment()
+			'latitude' => $location->getLatitude()
 		);
 
 		// TODO CHECK
@@ -75,7 +74,6 @@ class EstablishmentDAO
 		$location->setId($row['id']);
 		$location->setLongitude($row['longitude']);
 		$location->setLatitude($row['latitude']);
-		$location->setEstablishement($row['establishment_id']);
 
 		return $location;
 	}

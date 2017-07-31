@@ -41,13 +41,13 @@ class Drink
         return $this;
     }
 
-        public function getEtablishement()
+        public function getEstablishment()
     {
-        return $this->etablishement;
+        return $this->establishment;
     }
-    public function setEtablishement($etablishement)
+    public function setEstablishment($establishment)
     {
-        $this->etablishement = $etablishement;
+        $this->establishment = $establishment;
         return $this;
     }
 

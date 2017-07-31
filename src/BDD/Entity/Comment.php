@@ -8,7 +8,7 @@ class Comment
     private $user;
     private $comment;
     private $score;
-    private $establishement;
+    private $establishment;
 
     public function __construct(){}
 
@@ -52,13 +52,13 @@ class Comment
         return $this;
     }
 
-    public function getEtablishment()
+    public function getEstablishment()
     {
-        return $this->etablishment;
+        return $this->establishment;
     }
-    public function setEtablishement($etablishment)
+    public function setEstablishment($establishment)
     {
-        $this->etablishment = $etablishment;
+        $this->establishment = $establishment;
         return $this;
     }
 

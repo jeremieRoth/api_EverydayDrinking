@@ -75,7 +75,7 @@ class CommentDAO
 	{
 		$comment = new Comment();
 		$comment->setId($row['id']);
-		$comment->setName($row['name']);
+		$comment->setUser($row['user_id']);
 		$comment->setComment($row['comment']);
         $comment->setScore($row['score']);
         $comment->setEstablishment($row['establishment_id']);

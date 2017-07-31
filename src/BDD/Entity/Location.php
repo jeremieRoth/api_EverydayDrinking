@@ -7,7 +7,6 @@ class Location
     private $id;
     private $longitude;
     private $latitude;
-    private $etablishment;
 
     public function __construct(){}
 
@@ -38,16 +37,6 @@ class Location
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
-        return $this;
-    }
-
-    public function getEtablishment()
-    {
-        return $this->etablishment;
-    }
-    public function setEtablishment($etablishment)
-    {
-        $this->etablishment = $etablishment;
         return $this;
     }
 

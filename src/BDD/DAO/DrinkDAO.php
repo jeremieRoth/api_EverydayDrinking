@@ -2,7 +2,7 @@
 
 namespace everydayDrinking\BDD\DAO;
 
-use everydayDrinking\BDD\Entity\Establishment;
+use everydayDrinking\BDD\Entity\Drink;
 
 use Doctrine\DBAL\Connection;
 

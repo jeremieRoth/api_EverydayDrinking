@@ -5,6 +5,10 @@ use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 
 use everydayDrinking\BDD\DAO\EstablishmentDAO;
+use everydayDrinking\BDD\DAO\CommentDAO;
+use everydayDrinking\BDD\DAO\DrinkDAO;
+use everydayDrinking\BDD\DAO\LocationDAO;
+use everydayDrinking\BDD\DAO\UserDAO;
 
 // Register global error and exception handlers
 ErrorHandler::register();
@@ -26,3 +30,20 @@ $app['db.options'] = array(
 $app['dao.establishment'] = function ($app) {
     return new EstablishmentDAO($app['db']);
 };
+
+$app['dao.comment'] = function ($app) {
+    return new CommentDAO($app['db']);
+};
+
+$app['dao.drink'] = function ($app) {
+    return new DrinkDAO($app['db']);
+};
+
+$app['dao.location'] = function ($app) {
+    return new LocationDAO($app['db']);
+};
+
+$app['dao.user'] = function ($app) {
+    return new UserDAO($app['db']);
+};
+

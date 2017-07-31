@@ -2,11 +2,11 @@
 
 namespace everydayDrinking\BDD\DAO;
 
-use everydayDrinking\BDD\Entity\Establishment;
+use everydayDrinking\BDD\Entity\User;
 
 use Doctrine\DBAL\Connection;
 
-class EstablishmentDAO
+class UserDAO
 {
 	private $db;
 
@@ -73,7 +73,7 @@ class EstablishmentDAO
 	{
 		$user = new User();
 		$user->setId($row['id']);
-		$user->setName($row['login']);
+		$user->setLogin($row['login']);
 		$user->setPassword($row['password']);
 		$user->setUserName($row['user_name']);
 

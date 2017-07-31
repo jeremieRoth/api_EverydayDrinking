@@ -9,7 +9,7 @@ class User
     private $password;
     private $userName;
 
-    private function __construct(){
+    public function __construct(){
         //add md5 cryptage
     }
 
