@@ -6,7 +6,7 @@ use everydayDrinking\BDD\Entity\Establishment;
 
 use Doctrine\DBAL\Connection;
 
-class EstablishmentDAO
+class DrinkDAO
 {
 	private $db;
 
@@ -22,7 +22,7 @@ class EstablishmentDAO
 
 	public function findAll()
 	{
-		$sql = "SELECT * FROM establishment";
+		$sql = "SELECT * FROM drink";
 		$result = $this->getDb()->fetchAll($sql);
 
 		$entities = array();
@@ -36,45 +36,49 @@ class EstablishmentDAO
 
 	public function find($id)
 	{
-		$sql = "SELECT * FROM establishment WHERE id=?";
+		$sql = "SELECT * FROM drink WHERE id=?";
 		$row = $this->getDb()->fetchAssoc($sql, array($id));
 
 		if ($row) {
 			return $this->buildDomainObjects($row);
 		} else {
-			throw new \Exception("No establishment matching id ".$id);
+			throw new \Exception("No drink matching id ".$id);
 		}
 	}
 
-	public function save(Establishment $establishment)
+	public function save(Drink $drink)
 	{
-		$$establishmentData = array(
-			'name' => $$establishment->getName(),
-			'location' => $establishment->getLocation()
+		$drinkData = array(
+			'name' => $drink->getName(),
+			'price' => $drink->getPrice(),
+			'establishment' => $drink->getEstablishment()
+			
 		);
 
 		// TODO CHECK
-		if ($$establishment->getId()) {
-			$this->getDb()->update('establishment', $establishmentData, array('id' => $establishment->getId()));
+		if ($drink->getId()) {
+			$this->getDb()->update('drink', $drinkData, array('id' => $drink->getId()));
 		} else {
-			$this->getDb()->insert('establishment', $establishmentData);
+			$this->getDb()->insert('drink', $drinkData);
 			$id = $this->getDb()->lastInsertId();
-			$establishment->setId($id);
+			$drink->setId($id);
 		}
 	}
 
 	public function delete($id)
 	{
-		$this->getDb()->delete('establishment', array('id' => $id));
+		$this->getDb()->delete('drink', array('id' => $id));
 	}
 
 	protected function buildDomainObjects($row)
 	{
-		$establishment = new establishment();
-		$establishment->setId($row['id']);
-		$establishment->setName($row['name']);
-		$establishment->setLocation($row['location_id']);
+		$drink = new Drink();
+		$drink->setId($row['id']);
+		$drink->setName($row['name']);
+		$drink->setPrice($row['price']);
+		$drink->setEstablishment($row['establishment_id']);
+		
 
-		return $establishment;
+		return $drink;
 	}
 }

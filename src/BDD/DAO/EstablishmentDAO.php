@@ -70,7 +70,7 @@ class EstablishmentDAO
 
 	protected function buildDomainObjects($row)
 	{
-		$establishment = new establishment();
+		$establishment = new Establishment();
 		$establishment->setId($row['id']);
 		$establishment->setName($row['name']);
 		$establishment->setLocation($row['location_id']);

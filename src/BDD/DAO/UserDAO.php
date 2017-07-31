@@ -22,7 +22,7 @@ class EstablishmentDAO
 
 	public function findAll()
 	{
-		$sql = "SELECT * FROM establishment";
+		$sql = "SELECT * FROM user";
 		$result = $this->getDb()->fetchAll($sql);
 
 		$entities = array();
@@ -36,45 +36,47 @@ class EstablishmentDAO
 
 	public function find($id)
 	{
-		$sql = "SELECT * FROM establishment WHERE id=?";
+		$sql = "SELECT * FROM user WHERE id=?";
 		$row = $this->getDb()->fetchAssoc($sql, array($id));
 
 		if ($row) {
 			return $this->buildDomainObjects($row);
 		} else {
-			throw new \Exception("No establishment matching id ".$id);
+			throw new \Exception("No user matching id ".$id);
 		}
 	}
 
-	public function save(Establishment $establishment)
+	public function save(User $user)
 	{
-		$$establishmentData = array(
-			'name' => $$establishment->getName(),
-			'location' => $establishment->getLocation()
+		$userData = array(
+			'login' => $user->getName(),
+			'passowrd' => $user->getLocation(),
+			'user_name' => $user->getLocation()
 		);
 
 		// TODO CHECK
-		if ($$establishment->getId()) {
-			$this->getDb()->update('establishment', $establishmentData, array('id' => $establishment->getId()));
+		if ($user->getId()) {
+			$this->getDb()->update('user', $userData, array('id' => $user->getId()));
 		} else {
-			$this->getDb()->insert('establishment', $establishmentData);
+			$this->getDb()->insert('user', $userData);
 			$id = $this->getDb()->lastInsertId();
-			$establishment->setId($id);
+			$user->setId($id);
 		}
 	}
 
 	public function delete($id)
 	{
-		$this->getDb()->delete('establishment', array('id' => $id));
+		$this->getDb()->delete('user', array('id' => $id));
 	}
 
 	protected function buildDomainObjects($row)
 	{
-		$establishment = new establishment();
-		$establishment->setId($row['id']);
-		$establishment->setName($row['name']);
-		$establishment->setLocation($row['location_id']);
+		$user = new User();
+		$user->setId($row['id']);
+		$user->setName($row['login']);
+		$user->setPassword($row['password']);
+		$user->setUserName($row['user_name']);
 
-		return $establishment;
+		return $user;
 	}
 }

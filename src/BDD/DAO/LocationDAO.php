@@ -22,7 +22,7 @@ class EstablishmentDAO
 
 	public function findAll()
 	{
-		$sql = "SELECT * FROM establishment";
+		$sql = "SELECT * FROM Location";
 		$result = $this->getDb()->fetchAll($sql);
 
 		$entities = array();
@@ -36,45 +36,47 @@ class EstablishmentDAO
 
 	public function find($id)
 	{
-		$sql = "SELECT * FROM establishment WHERE id=?";
+		$sql = "SELECT * FROM location WHERE id=?";
 		$row = $this->getDb()->fetchAssoc($sql, array($id));
 
 		if ($row) {
 			return $this->buildDomainObjects($row);
 		} else {
-			throw new \Exception("No establishment matching id ".$id);
+			throw new \Exception("No location matching id ".$id);
 		}
 	}
 
-	public function save(Establishment $establishment)
+	public function save(Location $location)
 	{
-		$$establishmentData = array(
-			'name' => $$establishment->getName(),
-			'location' => $establishment->getLocation()
+		$locationData = array(
+			'longitude' => $location->getLongitude(),
+			'latitude' => $location->getLatitude(),
+			'establishment' => $location->getEstablishment()
 		);
 
 		// TODO CHECK
-		if ($$establishment->getId()) {
-			$this->getDb()->update('establishment', $establishmentData, array('id' => $establishment->getId()));
+		if ($location->getId()) {
+			$this->getDb()->update('location', $locationData, array('id' => $location->getId()));
 		} else {
-			$this->getDb()->insert('establishment', $establishmentData);
+			$this->getDb()->insert('location', $locationData);
 			$id = $this->getDb()->lastInsertId();
-			$establishment->setId($id);
+			$location->setId($id);
 		}
 	}
 
 	public function delete($id)
 	{
-		$this->getDb()->delete('establishment', array('id' => $id));
+		$this->getDb()->delete('location', array('id' => $id));
 	}
 
 	protected function buildDomainObjects($row)
 	{
-		$establishment = new establishment();
-		$establishment->setId($row['id']);
-		$establishment->setName($row['name']);
-		$establishment->setLocation($row['location_id']);
+		$location = new Location();
+		$location->setId($row['id']);
+		$location->setLongitude($row['longitude']);
+		$location->setLatitude($row['latitude']);
+		$location->setEstablishement($row['establishment_id']);
 
-		return $establishment;
+		return $location;
 	}
 }

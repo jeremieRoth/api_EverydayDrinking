@@ -24,3 +24,18 @@ $app->get('/establishments', function() use ($app){
 	}
     return $app->json($responseData);
 });
+
+$app->get('/comments', function() use ($app){
+    $establishments = $app['dao.comment']->findAll();
+    $responseData = array();
+	foreach ($comments as $comment) {
+		$responseData[] = array(
+			'id' => $comment->getId(),
+			'name' => $comment->getName(),
+			'comment' => $comment->getComment(),
+            'score' => $comment->getScore(),
+            'establishment' => $comment->getEstablishment()
+		);
+	}
+    return $app->json($responseData);
+});

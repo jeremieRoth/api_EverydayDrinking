@@ -46,13 +46,13 @@ class CommentDAO
 		}
 	}
 
-	public function save(Establishment $comment)
+	public function save(Comment $comment)
 	{
 		$commentData = array(
-			'user' => $establishment->getName(),
-			'comment' => $establishment->getLocation(),
-            'score' => $establishment->getLocation(),
-            'establishment' => $establishment->getLocation()
+			'user' => $comment->getName(),
+			'comment' => $comment->getLocation(),
+            'score' => $comment->getLocation(),
+            'establishment' => $comment->getLocation()
 
 		);
 
