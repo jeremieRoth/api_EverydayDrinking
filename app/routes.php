@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 
 // Home page
 $app->get('/', function () use ($app) {
@@ -12,7 +13,8 @@ $app->get('/', function () use ($app) {
     return $view;
 });
 
-$app->get('/establishments', function() use ($app){
+$app->get('/establishments', function() use ($app)
+{
     $establishments = $app['dao.establishment']->findAll();
     $responseData = array();
 	foreach ($establishments as $establishment) {
@@ -25,24 +27,41 @@ $app->get('/establishments', function() use ($app){
     return $app->json($responseData);
 });
 
-$app->get('/establishment/{id}', function() use ($app){
+$app->get('/establishment/{id}', function($id, Request $request) use ($app)
+{
     $establishments = $app['dao.establishment']->find($id);
 	if(!isset($establishments)){
 		$app->abort(404, 'establishments not exist');
 	}
     $responseData = array();
-	foreach ($establishments as $establishment) {
 		$responseData[] = array(
-			'id' => $establishment->getId(),
-			'name' => $establishment->getName(),
-			'location' => $establishment->getLocation()
+			'id' => $establishments->getId(),
+			'name' => $establishments->getName(),
+			'location' => $establishments->getLocation()
 		);
-	}
-    return $app->json($responseData);
+    return $app->json($responseData) ;
+});
+
+$app->post('/establishment',function(Request $request) use ($app)
+{
+	$data = json_decode();
+
+
+});
+
+$app->put('/establishment/{id}',function($id, Response $response) use ($app)
+{
+
+});
+
+$app->delete('/establishment/{id}',function($id) use ($app)
+{
+
 });
 
 
-$app->get('/comments', function() use ($app){
+$app->get('/comments', function() use ($app)
+{
     $comments = $app['dao.comment']->findAll();
     $responseData = array();
 	foreach ($comments as $comment) {
@@ -57,13 +76,13 @@ $app->get('/comments', function() use ($app){
     return $app->json($responseData);
 });
 
-$app->get('/comment/{id}', function() use ($app){
-    $comments = $app['dao.comment']->findAll();
-	if(!isset($comments)){
+$app->get('/comment/{id}', function($id, Request $request) use ($app)
+{
+    $comment = $app['dao.comment']->find($id);
+	if(!isset($comment)){
 		$app->abort(404, 'comment not exist');
 	}
     $responseData = array();
-	foreach ($comments as $comment) {
 		$responseData[] = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
@@ -71,11 +90,28 @@ $app->get('/comment/{id}', function() use ($app){
             'score' => $comment->getScore(),
             'establishment' => $comment->getEstablishment()
 		);
-	}
     return $app->json($responseData);
 });
 
-$app->get('/drinks', function() use ($app){
+$app->post('/comment',function(Request $request) use ($app)
+{
+	$data = json_decode();
+
+
+});
+
+$app->put('/comment/{id}',function($id, Response $response) use ($app)
+{
+
+});
+
+$app->delete('/comment/{id}',function($id) use ($app)
+{
+
+});
+
+$app->get('/drinks', function() use ($app)
+{
     $drinks = $app['dao.drink']->findAll();
     $responseData = array();
 	foreach ($drinks as $drink) {
@@ -89,24 +125,41 @@ $app->get('/drinks', function() use ($app){
     return $app->json($responseData);
 });
 
-$app->get('/drink/{id}', function() use ($app){
-    $drinks = $app['dao.drink']->findAll();
-	if(!isset($drinks)){
+$app->get('/drink/{id}', function($id, Request $request) use ($app)
+{
+    $drink = $app['dao.drink']->find($id);
+	if(!isset($drink)){
 		$app->abort(404, 'drink not exist');
 	}
     $responseData = array();
-	foreach ($drinks as $drink) {
 		$responseData[] = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
             'establishment' => $drink->getEstablishment()
 		);
-	}
     return $app->json($responseData);
 });
 
-$app->get('/locations', function() use ($app){
+$app->post('/drink',function(Request $request) use ($app)
+{
+	$data = json_decode();
+
+
+});
+
+$app->put('/drink/{id}',function($id, Response $response) use ($app)
+{
+
+});
+
+$app->delete('/drink/{id}',function($id) use ($app)
+{
+
+});
+
+$app->get('/locations', function() use ($app)
+{
     $locations = $app['dao.location']->findAll();
     $responseData = array();
 	foreach ($locations as $location) {
@@ -119,23 +172,40 @@ $app->get('/locations', function() use ($app){
     return $app->json($responseData);
 });
 
-$app->get('/location/{id}', function() use ($app){
-    $locations = $app['dao.location']->findAll();
-	if(!isset($locations)){
+$app->get('/location/{id}', function($id, Request $request) use ($app)
+{
+    $location = $app['dao.location']->find($id);
+	if(!isset($location)){
 		$app->abort(404, 'location not exist');
 	}
     $responseData = array();
-	foreach ($locations as $location) {
 		$responseData[] = array(
 			'id' => $location->getId(),
 			'lontitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
 		);
-	}
     return $app->json($responseData);
 });
 
-$app->get('/users', function() use ($app){
+$app->post('/location',function(Request $request) use ($app)
+{
+	$data = json_decode();
+
+
+});
+
+$app->put('/location/{id}',function($id, Response $response) use ($app)
+{
+
+});
+
+$app->delete('/location/{id}',function($id) use ($app)
+{
+
+});
+
+$app->get('/users', function() use ($app)
+{
     $users = $app['dao.user']->findAll();
     $responseData = array();
 	foreach ($users as $user) {
@@ -149,20 +219,35 @@ $app->get('/users', function() use ($app){
     return $app->json($responseData);
 });
 
-$app->get('/user/{id}', function() use ($app){
-    $users = $app['dao.user']->findAll();
-	if(!isset($users)){
+$app->get('/user/{id}', function($id, Request $request) use ($app)
+{
+    $user = $app['dao.user']->find($id);
+	if(!isset($user)){
 		$app->abort(404, 'user not exist');
 	}
     $responseData = array();
-	foreach ($users as $user) {
 		$responseData[] = array(
 			'id' => $user->getId(),
 			'login' => $user->getLogin(),
 			'password' => $user->getPassword(),
             'username' => $user->getUserName()
 		);
-	}
     return $app->json($responseData);
 });
 
+$app->post('/user',function(Request $request) use ($app)
+{
+	$data = json_decode();
+
+
+});
+
+$app->put('/user/{id}',function($id, Response $response) use ($app)
+{
+
+});
+
+$app->delete('/user/{id}',function($id) use ($app)
+{
+
+});
