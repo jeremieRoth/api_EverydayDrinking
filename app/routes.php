@@ -30,6 +30,7 @@ $app->get('/establishments', function() use ($app)
 $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 {
     $establishments = $app['dao.establishment']->find($id);
+	$establishments->setLocation($app['dao.location']->find($establishments->getLocation()));
 	if(!isset($establishments)){
 		$app->abort(404, 'establishments not exist');
 	}
@@ -37,7 +38,9 @@ $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 		$responseData[] = array(
 			'id' => $establishments->getId(),
 			'name' => $establishments->getName(),
-			'location' => $establishments->getLocation()
+			'location' => array('id' => $establishments->getLocation()->getId(),
+								'longitutde' => $establishments->getLocation()->getLongitude(),
+								'latitude' => $establishments->getLocation()->getLatitude())
 		);
     return $app->json($responseData) ;
 });
@@ -45,8 +48,6 @@ $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 $app->post('/establishment',function(Request $request) use ($app)
 {
 	$data = json_decode();
-
-
 });
 
 $app->put('/establishment/{id}',function($id, Response $response) use ($app)
