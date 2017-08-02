@@ -18,10 +18,13 @@ $app->get('/establishments', function() use ($app)
     $establishments = $app['dao.establishment']->findAll();
     $responseData = array();
 	foreach ($establishments as $establishment) {
+		$establishment->setLocation($app['dao.location']->find($establishment->getLocation()));
 		$responseData[] = array(
 			'id' => $establishment->getId(),
 			'name' => $establishment->getName(),
-			'location' => $establishment->getLocation()
+			'location' => array('id' => $establishment->getLocation()->getId(),
+								'longitutde' => $establishment->getLocation()->getLongitude(),
+								'latitude' => $establishment->getLocation()->getLatitude())
 		);
 	}
     return $app->json($responseData);
@@ -66,12 +69,18 @@ $app->get('/comments', function() use ($app)
     $comments = $app['dao.comment']->findAll();
     $responseData = array();
 	foreach ($comments as $comment) {
+		$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
+		$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
 		$responseData[] = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
 			'comment' => $comment->getComment(),
             'score' => $comment->getScore(),
-            'establishment' => $comment->getEstablishment()
+            'establishment' => array('id' => $comment->getEstablishment()->getId(),
+									 'name' => $comment->getEstablishment()->getName(),
+									 'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+														 'longitutde' => $comment->getEstablishment()->getLocation()->getLongitude(),
+														 'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
     return $app->json($responseData);
