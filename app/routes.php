@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 // Home page
 $app->get('/', function () use ($app) {
@@ -28,7 +29,7 @@ $app->get('/establishments', function() use ($app)
 		);
 	}
     return $app->json($responseData);
-});
+})->bind('establishments');
 
 $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 {
@@ -46,22 +47,57 @@ $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 								'latitude' => $establishments->getLocation()->getLatitude())
 		);
     return $app->json($responseData) ;
-});
+})->bind('get-establishment');
 
 $app->post('/establishment',function(Request $request) use ($app)
 {
+	if (!$request->request->has('name')) {
+		return $app->json('Missing parameter: name', 400);
+	}
+	if (!$request->request->has('location')) {
+		return $app->json('Missing parameter: location', 400);
+	}
+
+	$establishment = new Establishment();
+	$establishment->setName($request->request->get('name'));
+	$establishment->setLocation($request->request->get('location'));
+	$app['dao.establishment']->save($establishment);
+
+	$responseData = array(
+		'id' => $establishment->getId(),
+		'name' => $establishment->getName(),
+		'location' => $establishment->getLocation()
+	);
+
+	return $app->json($responseData, 201);
 	$data = json_decode();
-});
+})->bind('post-establishment');
 
 $app->put('/establishment/{id}',function($id, Response $response) use ($app)
 {
+	$estblishment = $app['dao.establishment']->find($id);
 
-});
+	$estblishment->setName($request->request->get('name'));
+	$estblishment->setLocation($request->request->get('location'));
+	$app['dao.establishment']->save($estblishment);
+
+	$responseData = array(
+		'id' => $estblishment->getId(),
+		'name' => $estblishment->getName(),
+		'location' => $estblishment->getLocation()
+	);
+
+	return $app->json($responseData, 202);
+
+})->bind('put-establishment');
 
 $app->delete('/establishment/{id}',function($id) use ($app)
 {
+	$app['dao.establishment']->delete($id);
 
-});
+	return $app->json('No content', 204);
+
+})->bind('delete-establishment');
 
 
 $app->get('/comments', function() use ($app)
@@ -84,7 +120,7 @@ $app->get('/comments', function() use ($app)
 		);
 	}
     return $app->json($responseData);
-});
+})->bind('comments');
 
 $app->get('/comment/{id}', function($id, Request $request) use ($app)
 {
@@ -92,48 +128,109 @@ $app->get('/comment/{id}', function($id, Request $request) use ($app)
 	if(!isset($comment)){
 		$app->abort(404, 'comment not exist');
 	}
+	$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
+	$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
     $responseData = array();
 		$responseData[] = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
 			'comment' => $comment->getComment(),
             'score' => $comment->getScore(),
-            'establishment' => $comment->getEstablishment()
+            'establishment' => array('id' => $comment->getEstablishment()->getId(),
+									 'name' => $comment->getEstablishment()->getName(),
+									 'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+														 'longitutde' => $comment->getEstablishment()->getLocation()->getLongitude(),
+														 'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 		);
     return $app->json($responseData);
-});
+})->bind('get-comment');
 
 $app->post('/comment',function(Request $request) use ($app)
 {
+	if (!$request->request->has('user')){
+		return $app->json('Missing parameter: user', 400);
+	}
+	if(!$request->request->has('comment')){
+		return $app->json('Missing parameter: comment', 400);
+	}
+	if(!$request->request->has('score')){
+		return $app->json('Missing parameter: score', 400);
+	}
+	if(!$request->request->has('establishment')){
+		return $app->json('Missing parameter: establishment', 400);
+	}
+
+	$comment = new Comment();
+	$comment->setUser($request->request->get('user'));
+	$comment->setComment($request->request->get('comment'));
+	$comment->setScore($request->request->get('score'));
+	$comment->setEstablishment($request->request->get('establishment'));	
+	$app['dao.comment']->save($comment);
+
+	$responseData = array(
+		'id' => $comment->getId(),
+		'user' => $comment->getUser(),
+		'comment' => $comment->getComment(),
+        'score' => $comment->getScore(),
+        'establishment' => $comment->getEstablishment()
+	);
+
+	return $app->json($responseData, 201);
 	$data = json_decode();
 
 
-});
+})->bind('post-comment');
 
 $app->put('/comment/{id}',function($id, Response $response) use ($app)
 {
+	$comment = $app['dao.comment']->find($id);
 
-});
+	$comment->setName($request->request->get('user'));
+	$comment->setLocation($request->request->get('comment'));
+	$comment->setLocation($request->request->get('score'));
+	$comment->setLocation($request->request->get('establishment'));
+	$app['dao.comment']->save($comment);
+
+	$responseData = array(
+		'id' => $comment->getId(),
+		'user' => $comment->getUser(),
+		'comment' => $comment->getComment(),
+        'score' => $comment->getScore(),
+        'establishment' => $comment->getEstablishment()
+	);
+
+	return $app->json($responseData, 202);
+
+})->bind('put-comment');
 
 $app->delete('/comment/{id}',function($id) use ($app)
 {
+	$app['dao.establishment']->delete($id);
 
-});
+	return $app->json('No content', 204);
+
+})->bind('delete-comment');
 
 $app->get('/drinks', function() use ($app)
 {
     $drinks = $app['dao.drink']->findAll();
     $responseData = array();
 	foreach ($drinks as $drink) {
+		$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
+		$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
 		$responseData[] = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
-            'establishment' => $drink->getEstablishment()
+            'establishment' => array('id' => $drink->getEstablishment()->getId(),
+									 'name' => $drink->getEstablishment()->getName(),
+									 'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
+														 'longitutde' => $drink->getEstablishment()->getLocation()->getLongitude(),
+														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
     return $app->json($responseData);
-});
+})->bind('drinks');
 
 $app->get('/drink/{id}', function($id, Request $request) use ($app)
 {
@@ -141,32 +238,81 @@ $app->get('/drink/{id}', function($id, Request $request) use ($app)
 	if(!isset($drink)){
 		$app->abort(404, 'drink not exist');
 	}
+	$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
+	$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
     $responseData = array();
 		$responseData[] = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
-            'establishment' => $drink->getEstablishment()
+            'establishment' => array('id' => $drink->getEstablishment()->getId(),
+									 'name' => $drink->getEstablishment()->getName(),
+									 'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
+														 'longitutde' => $drink->getEstablishment()->getLocation()->getLongitude(),
+														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
     return $app->json($responseData);
-});
+})->bind('get-drink');
 
 $app->post('/drink',function(Request $request) use ($app)
 {
+	if (!$request->request->has('name')) {
+		return $app->json('Missing parameter: location', 400);
+	}
+	if(!$request->request->has('price')){
+		return $app->json('Missing parameter: location', 400);
+	}
+	if(!$request->request->has('establishment')){
+		return $app->json('Missing parameter: location', 400);
+	}
+
+	$drink = new Drink();
+	$drink->setName($request->request->get('name'));
+	$drink->setLocation($request->request->get('location'));
+	$app['dao.drink']->save($drink);
+
+	$responseData = array(
+		'id' => $drink->getId(),
+		'name' => $drink->getName(),
+		'price' => $drink->getPrice(),
+        'establishment' => $drink->getEstablishment()
+	);
+
+	return $app->json($responseData, 201);
 	$data = json_decode();
 
 
-});
+})->bind('post-drink');
 
 $app->put('/drink/{id}',function($id, Response $response) use ($app)
 {
 
-});
+	$drink = $app['dao.drink']->find($id);
+
+	$drink->setName($request->request->get('name'));
+	$drink->setLocation($request->request->get('price'));
+	$drink->setLocation($request->request->get('establishment'));
+	$app['dao.drink']->save($drink);
+
+	$responseData = array(
+		'id' => $drink->getId(),
+		'name' => $drink->getName(),
+		'price' => $drink->getPrice(),
+        'establishment' => $drink->getEstablishment()
+	);
+
+	return $app->json($responseData, 202);
+
+
+})->bind('put-drink');
 
 $app->delete('/drink/{id}',function($id) use ($app)
 {
+	$app['dao.drink']->delete($id);
 
-});
+	return $app->json('No content', 204);
+
+})->bind('delete-drink');
 
 $app->get('/locations', function() use ($app)
 {
@@ -175,12 +321,12 @@ $app->get('/locations', function() use ($app)
 	foreach ($locations as $location) {
 		$responseData[] = array(
 			'id' => $location->getId(),
-			'lontitude' => $location->getLongitude(),
+			'longitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
 		);
 	}
     return $app->json($responseData);
-});
+})->bind('locations');
 
 $app->get('/location/{id}', function($id, Request $request) use ($app)
 {
@@ -191,28 +337,63 @@ $app->get('/location/{id}', function($id, Request $request) use ($app)
     $responseData = array();
 		$responseData[] = array(
 			'id' => $location->getId(),
-			'lontitude' => $location->getLongitude(),
+			'longitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
 		);
     return $app->json($responseData);
-});
+})->bind('get-location');
 
 $app->post('/location',function(Request $request) use ($app)
 {
+	if (!$request->request->has('longitude')) {
+		return $app->json('Missing parameter: location', 400);
+	}
+	if(!$request->request->has('latitude')){
+		return $app->json('Missing parameter: location', 400);
+	}
+
+	$location = new Location();
+	$location->setLongitude($request->request->get('longitude'));
+	$location->setLatitude($request->request->get('latitude'));
+	$app['dao.drink']->save($location);
+
+	$responseData = array(
+		'id' => $location->getId(),
+		'longitude' => $location->getLongitude(),
+		'latitude' => $location->getLatitude()
+	);
+
+	return $app->json($responseData, 201);
 	$data = json_decode();
 
 
-});
+})->bind('post-location');
 
 $app->put('/location/{id}',function($id, Response $response) use ($app)
 {
+	$location = $app['dao.location']->find($id);
 
-});
+	$location->setLongitude($request->request->get('longitude'));
+	$location->setLatitude($request->request->get('latitude'));
+	$app['dao.drink']->save($location);
+
+	$responseData = array(
+		'id' => $location->getId(),
+		'longitude' => $location->getLongitude(),
+		'latitude' => $location->getLatitude()
+	);
+
+	return $app->json($responseData, 202);
+
+})->bind('put-location');
 
 $app->delete('/location/{id}',function($id) use ($app)
 {
+	$app['dao.drink']->delete($id);
 
-});
+	return $app->json('No content', 204);
+
+})->bind('delete-location');
 
 $app->get('/users', function() use ($app)
 {
@@ -227,7 +408,7 @@ $app->get('/users', function() use ($app)
 		);
 	}
     return $app->json($responseData);
-});
+})->bind('users');
 
 $app->get('/user/{id}', function($id, Request $request) use ($app)
 {
@@ -243,21 +424,60 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
             'username' => $user->getUserName()
 		);
     return $app->json($responseData);
-});
+})->bind('get-user');
 
 $app->post('/user',function(Request $request) use ($app)
 {
+	if (!$request->request->has('longitude')) {
+		return $app->json('Missing parameter: location', 400);
+	}
+	if(!$request->request->has('latitude')){
+		return $app->json('Missing parameter: location', 400);
+	}
+
+	$user = new User();
+	$user->setLongitude($request->request->get('login'));
+	$user->setLatitude($request->request->get('password'));
+	$user->setLatitude($request->request->get('username'));
+	$app['dao.drink']->save($user);
+
+	$responseData = array(
+		'id' => $user->getId(),
+		'login' => $user->getLogin(),
+		'password' => $user->getPassword(),
+        'username' => $user->getUserName()
+	);
+
+	return $app->json($responseData, 201);
 	$data = json_decode();
 
 
-});
+})->bind('post-user');
 
 $app->put('/user/{id}',function($id, Response $response) use ($app)
 {
+	$user = $app['dao.user']->find($id);
 
-});
+	$user->setLongitude($request->request->get('longitude'));
+	$user->setLatitude($request->request->get('latitude'));
+	$app['dao.drink']->save($user);
+
+	$responseData = array(
+		'id' => $user->getId(),
+		'login' => $user->getLogin(),
+		'password' => $user->getPassword(),
+        'username' => $user->getUserName()
+	);
+
+	return $app->json($responseData, 202);
+	
+
+})->bind('put-user');
 
 $app->delete('/user/{id}',function($id) use ($app)
 {
+	$app['dao.user']->delete($id);
 
-});
+	return $app->json('No content', 204);
+
+})->bind('delete-user');
