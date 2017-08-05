@@ -49,10 +49,10 @@ class CommentDAO
 	public function save(Comment $comment)
 	{
 		$commentData = array(
-			'user' => $comment->getName(),
-			'comment' => $comment->getLocation(),
-            'score' => $comment->getLocation(),
-            'establishment' => $comment->getLocation()
+			'user' => $comment->getUser(),
+			'comment' => $comment->getComment(),
+            'score' => $comment->getScore(),
+            'establishment' => $comment->getEstablishment()
 
 		);
 

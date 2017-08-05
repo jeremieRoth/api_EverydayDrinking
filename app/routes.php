@@ -3,6 +3,12 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use everydayDrinking\BDD\Entity\Establishment;
+use everydayDrinking\BDD\Entity\Drink;
+use everydayDrinking\BDD\Entity\Comment;
+use everydayDrinking\BDD\Entity\Location;
+use everydayDrinking\BDD\Entity\User;
+
 // Home page
 $app->get('/', function () use ($app) {
     //require '../src/model.php';
@@ -181,14 +187,15 @@ $app->post('/comment',function(Request $request) use ($app)
 
 })->bind('post-comment');
 
-$app->put('/comment/{id}',function($id, Response $response) use ($app)
+$app->put('/comment/{id}',function($id, Request $request) use ($app)
 {
 	$comment = $app['dao.comment']->find($id);
 
-	$comment->setName($request->request->get('user'));
-	$comment->setLocation($request->request->get('comment'));
-	$comment->setLocation($request->request->get('score'));
-	$comment->setLocation($request->request->get('establishment'));
+	$comment->setUser($request->request->get('user'));
+	$comment->setComment($request->request->get('comment'));
+	$comment->setScore($request->request->get('score'));
+	$comment->setEstablishment($request->request->get('establishment'));
+	echo $request->get('user');
 	$app['dao.comment']->save($comment);
 
 	$responseData = array(
@@ -256,19 +263,20 @@ $app->get('/drink/{id}', function($id, Request $request) use ($app)
 
 $app->post('/drink',function(Request $request) use ($app)
 {
-	if (!$request->request->has('name')) {
-		return $app->json('Missing parameter: location', 400);
+	if (!$request->request->has('name')){
+		return $app->json('Missing parameter: name', 400);
 	}
 	if(!$request->request->has('price')){
-		return $app->json('Missing parameter: location', 400);
+		return $app->json('Missing parameter: price', 400);
 	}
 	if(!$request->request->has('establishment')){
-		return $app->json('Missing parameter: location', 400);
+		return $app->json('Missing parameter: establishment', 400);
 	}
 
 	$drink = new Drink();
 	$drink->setName($request->request->get('name'));
-	$drink->setLocation($request->request->get('location'));
+	$drink->setPrice($request->request->get('name'));
+	$drink->setEstablishment($request->request->get('establishment'));
 	$app['dao.drink']->save($drink);
 
 	$responseData = array(
@@ -284,7 +292,7 @@ $app->post('/drink',function(Request $request) use ($app)
 
 })->bind('post-drink');
 
-$app->put('/drink/{id}',function($id, Response $response) use ($app)
+$app->put('/drink/{id}',function($id, Request $request) use ($app)
 {
 
 	$drink = $app['dao.drink']->find($id);
@@ -369,7 +377,7 @@ $app->post('/location',function(Request $request) use ($app)
 
 })->bind('post-location');
 
-$app->put('/location/{id}',function($id, Response $response) use ($app)
+$app->put('/location/{id}',function($id, Request $request) use ($app)
 {
 	$location = $app['dao.location']->find($id);
 
@@ -454,7 +462,7 @@ $app->post('/user',function(Request $request) use ($app)
 
 })->bind('post-user');
 
-$app->put('/user/{id}',function($id, Response $response) use ($app)
+$app->put('/user/{id}',function($id, Request $request) use ($app)
 {
 	$user = $app['dao.user']->find($id);
 
