@@ -48,13 +48,13 @@ class EstablishmentDAO
 
 	public function save(Establishment $establishment)
 	{
-		$$establishmentData = array(
-			'name' => $$establishment->getName(),
-			'location' => $establishment->getLocation()
+		$establishmentData = array(
+			'name' => $establishment->getName(),
+			'location_id' => $establishment->getLocation()
 		);
 
 		// TODO CHECK
-		if ($$establishment->getId()) {
+		if ($establishment->getId()) {
 			$this->getDb()->update('establishment', $establishmentData, array('id' => $establishment->getId()));
 		} else {
 			$this->getDb()->insert('establishment', $establishmentData);

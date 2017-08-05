@@ -79,7 +79,7 @@ $app->post('/establishment',function(Request $request) use ($app)
 	$data = json_decode();
 })->bind('post-establishment');
 
-$app->put('/establishment/{id}',function($id, Response $response) use ($app)
+$app->put('/establishment/{id}',function($id, Request $request) use ($app)
 {
 	$estblishment = $app['dao.establishment']->find($id);
 
@@ -383,7 +383,7 @@ $app->put('/location/{id}',function($id, Request $request) use ($app)
 
 	$location->setLongitude($request->request->get('longitude'));
 	$location->setLatitude($request->request->get('latitude'));
-	$app['dao.drink']->save($location);
+	$app['dao.location']->save($location);
 
 	$responseData = array(
 		'id' => $location->getId(),
