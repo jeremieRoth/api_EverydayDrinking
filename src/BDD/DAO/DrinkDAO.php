@@ -51,7 +51,7 @@ class DrinkDAO
 		$drinkData = array(
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
-			'establishment' => $drink->getEstablishment()
+			'establishment_id' => $drink->getEstablishment()
 			
 		);
 

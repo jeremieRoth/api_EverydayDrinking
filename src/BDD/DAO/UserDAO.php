@@ -49,9 +49,9 @@ class UserDAO
 	public function save(User $user)
 	{
 		$userData = array(
-			'login' => $user->getName(),
-			'passowrd' => $user->getLocation(),
-			'user_name' => $user->getLocation()
+			'login' => $user->getLogin(),
+			'password' => $user->getPassword(),
+			'user_name' => $user->getUserName()
 		);
 
 		// TODO CHECK

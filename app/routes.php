@@ -212,7 +212,7 @@ $app->put('/comment/{id}',function($id, Request $request) use ($app)
 
 $app->delete('/comment/{id}',function($id) use ($app)
 {
-	$app['dao.establishment']->delete($id);
+	$app['dao.comment']->delete($id);
 
 	return $app->json('No content', 204);
 
@@ -298,8 +298,8 @@ $app->put('/drink/{id}',function($id, Request $request) use ($app)
 	$drink = $app['dao.drink']->find($id);
 
 	$drink->setName($request->request->get('name'));
-	$drink->setLocation($request->request->get('price'));
-	$drink->setLocation($request->request->get('establishment'));
+	$drink->setPrice($request->request->get('price'));
+	$drink->setEstablishment($request->request->get('establishment'));
 	$app['dao.drink']->save($drink);
 
 	$responseData = array(
@@ -363,7 +363,7 @@ $app->post('/location',function(Request $request) use ($app)
 	$location = new Location();
 	$location->setLongitude($request->request->get('longitude'));
 	$location->setLatitude($request->request->get('latitude'));
-	$app['dao.drink']->save($location);
+	$app['dao.location']->save($location);
 
 	$responseData = array(
 		'id' => $location->getId(),
@@ -397,7 +397,7 @@ $app->put('/location/{id}',function($id, Request $request) use ($app)
 
 $app->delete('/location/{id}',function($id) use ($app)
 {
-	$app['dao.drink']->delete($id);
+	$app['dao.location']->delete($id);
 
 	return $app->json('No content', 204);
 
@@ -436,18 +436,21 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
 
 $app->post('/user',function(Request $request) use ($app)
 {
-	if (!$request->request->has('longitude')) {
-		return $app->json('Missing parameter: location', 400);
+	if (!$request->request->has('login')) {
+		return $app->json('Missing parameter: login', 400);
 	}
-	if(!$request->request->has('latitude')){
-		return $app->json('Missing parameter: location', 400);
+	if(!$request->request->has('password')){
+		return $app->json('Missing parameter: password', 400);
+	}
+	if(!$request->request->has('user_name')){
+		return $app->json('Missing parameter: user_name', 400);
 	}
 
 	$user = new User();
-	$user->setLongitude($request->request->get('login'));
-	$user->setLatitude($request->request->get('password'));
-	$user->setLatitude($request->request->get('username'));
-	$app['dao.drink']->save($user);
+	$user->setLogin($request->request->get('login'));
+	$user->setPassword($request->request->get('password'));
+	$user->setUserName($request->request->get('user_name'));
+	$app['dao.user']->save($user);
 
 	$responseData = array(
 		'id' => $user->getId(),
@@ -465,10 +468,10 @@ $app->post('/user',function(Request $request) use ($app)
 $app->put('/user/{id}',function($id, Request $request) use ($app)
 {
 	$user = $app['dao.user']->find($id);
-
-	$user->setLongitude($request->request->get('longitude'));
-	$user->setLatitude($request->request->get('latitude'));
-	$app['dao.drink']->save($user);
+	$user->setLogin($request->request->get('login'));
+	$user->setPassword($request->request->get('password'));
+	$user->setUserName($request->request->get('user_name'));
+	$app['dao.user']->save($user);
 
 	$responseData = array(
 		'id' => $user->getId(),
