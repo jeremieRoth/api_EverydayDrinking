@@ -26,7 +26,7 @@ $app->get('/establishments', function() use ($app)
     $responseData = array();
 	foreach ($establishments as $establishment) {
 		$establishment->setLocation($app['dao.location']->find($establishment->getLocation()));
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $establishment->getId(),
 			'name' => $establishment->getName(),
 			'location' => array('id' => $establishment->getLocation()->getId(),
@@ -45,7 +45,7 @@ $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 		$app->abort(404, 'establishments not exist');
 	}
     $responseData = array();
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $establishments->getId(),
 			'name' => $establishments->getName(),
 			'location' => array('id' => $establishments->getLocation()->getId(),
@@ -113,7 +113,7 @@ $app->get('/comments', function() use ($app)
 	foreach ($comments as $comment) {
 		$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 		$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
 			'comment' => $comment->getComment(),
@@ -137,7 +137,7 @@ $app->get('/comment/{id}', function($id, Request $request) use ($app)
 	$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 	$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
     $responseData = array();
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
 			'comment' => $comment->getComment(),
@@ -225,7 +225,7 @@ $app->get('/drinks', function() use ($app)
 	foreach ($drinks as $drink) {
 		$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
 		$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
@@ -248,7 +248,7 @@ $app->get('/drink/{id}', function($id, Request $request) use ($app)
 	$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
 	$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
     $responseData = array();
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
@@ -327,7 +327,7 @@ $app->get('/locations', function() use ($app)
     $locations = $app['dao.location']->findAll();
     $responseData = array();
 	foreach ($locations as $location) {
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $location->getId(),
 			'longitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
@@ -343,7 +343,7 @@ $app->get('/location/{id}', function($id, Request $request) use ($app)
 		$app->abort(404, 'location not exist');
 	}
     $responseData = array();
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $location->getId(),
 			'longitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
@@ -406,9 +406,8 @@ $app->delete('/location/{id}',function($id) use ($app)
 $app->get('/users', function() use ($app)
 {
     $users = $app['dao.user']->findAll();
-    $responseData = array();
 	foreach ($users as $user) {
-		$responseData[] = array(
+		$responseData = array(
 			'id' => $user->getId(),
 			'login' => $user->getLogin(),
 			'password' => $user->getPassword(),
@@ -424,13 +423,13 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
 	if(!isset($user)){
 		$app->abort(404, 'user not exist');
 	}
-    $responseData = array();
-		$responseData[] = array(
-			'id' => $user->getId(),
-			'login' => $user->getLogin(),
-			'password' => $user->getPassword(),
-            'username' => $user->getUserName()
-		);
+    
+	$responseData = array(
+		'id' => $user->getId(),
+		'login' => $user->getLogin(),
+		'password' => $user->getPassword(),
+        'username' => $user->getUserName()
+	);
     return $app->json($responseData);
 })->bind('get-user');
 
