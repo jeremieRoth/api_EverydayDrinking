@@ -111,11 +111,15 @@ $app->get('/comments', function() use ($app)
     $comments = $app['dao.comment']->findAll();
     $responseData = array();
 	foreach ($comments as $comment) {
+		$comment->setUser($app['dao.user']->find($comment->getUser()));
 		$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 		$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
 		$responseData[] = array(
 			'id' => $comment->getId(),
-			'user' => $comment->getUser(),
+			'user' => array('id' => $comment->getUser()->getId(),
+							'login' => $comment->getUser()->getLogin(),
+							'password' => $comment->getUser()->getPassword(),
+            				'username' => $comment->getUser()->getUserName()),
 			'comment' => $comment->getComment(),
             'score' => $comment->getScore(),
             'establishment' => array('id' => $comment->getEstablishment()->getId(),
