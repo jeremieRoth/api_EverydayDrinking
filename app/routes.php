@@ -26,7 +26,7 @@ $app->get('/establishments', function() use ($app)
     $responseData = array();
 	foreach ($establishments as $establishment) {
 		$establishment->setLocation($app['dao.location']->find($establishment->getLocation()));
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $establishment->getId(),
 			'name' => $establishment->getName(),
 			'location' => array('id' => $establishment->getLocation()->getId(),
@@ -113,7 +113,7 @@ $app->get('/comments', function() use ($app)
 	foreach ($comments as $comment) {
 		$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 		$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $comment->getId(),
 			'user' => $comment->getUser(),
 			'comment' => $comment->getComment(),
@@ -327,7 +327,7 @@ $app->get('/locations', function() use ($app)
     $locations = $app['dao.location']->findAll();
     $responseData = array();
 	foreach ($locations as $location) {
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $location->getId(),
 			'longitude' => $location->getLongitude(),
 			'latitude' => $location->getLatitude()
@@ -405,9 +405,10 @@ $app->delete('/location/{id}',function($id) use ($app)
 
 $app->get('/users', function() use ($app)
 {
+	$responseData = array();
     $users = $app['dao.user']->findAll();
 	foreach ($users as $user) {
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $user->getId(),
 			'login' => $user->getLogin(),
 			'password' => $user->getPassword(),
