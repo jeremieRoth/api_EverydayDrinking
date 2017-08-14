@@ -225,7 +225,7 @@ $app->get('/drinks', function() use ($app)
 	foreach ($drinks as $drink) {
 		$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
 		$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
