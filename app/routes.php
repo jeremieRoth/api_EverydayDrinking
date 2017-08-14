@@ -236,7 +236,7 @@ $app->get('/drinks', function() use ($app)
 														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
-    return $app->json($responseData);
+    return $app->json($responseData,202);
 })->bind('drinks');
 
 $app->get('/drink/{id}', function($id, Request $request) use ($app)
