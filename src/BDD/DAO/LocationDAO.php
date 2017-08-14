@@ -22,7 +22,7 @@ class LocationDAO
 
 	public function findAll()
 	{
-		$sql = "SELECT * FROM Location";
+		$sql = "SELECT * FROM location";
 		$result = $this->getDb()->fetchAll($sql);
 
 		$entities = array();
