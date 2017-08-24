@@ -438,6 +438,24 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
     return $app->json($responseData);
 })->bind('get-user');
 
+$app->get('/user/{login}/{password}', function($login, $password, Request $request) use ($app)
+{
+    $user = $app['dao.user']->findByNameAndPassword($id);
+	if(!isset($user)){
+		$app->abort(404, 'user not exist');
+	}
+    
+	$responseData = array(
+		'id' => $user->getId(),
+		'login' => $user->getLogin(),
+		'password' => $user->getPassword(),
+        'username' => $user->getUserName()
+	);
+    return $app->json($responseData);
+})->bind('get-user');
+
+
+
 $app->post('/user',function(Request $request) use ($app)
 {
 	if (!$request->request->has('login')) {
