@@ -440,7 +440,7 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
 
 $app->get('/user/{login}/{password}', function($login, $password, Request $request) use ($app)
 {
-    $user = $app['dao.user']->findByNameAndPassword($id);
+    $user = $app['dao.user']->findByNameAndPassword($login, $password);
 	if(!isset($user)){
 		$app->abort(404, 'user not exist');
 	}
