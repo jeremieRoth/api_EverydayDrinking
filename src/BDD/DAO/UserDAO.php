@@ -46,8 +46,8 @@ class UserDAO
 		}
 	}
 	public function findByNameAndPassword($login, $password)
-	{
-		$sql = "SELECT * FROM user WHERE login=?, password=?";
+	{	
+		$sql = "SELECT * FROM user WHERE login=? AND password=?";
 		$row = $this->getDb()->fetchAssoc($sql, array($login,$password));
 
 		if ($row) {
