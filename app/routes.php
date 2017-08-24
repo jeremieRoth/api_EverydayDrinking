@@ -452,7 +452,7 @@ $app->get('/user/{login}/{password}', function($login, $password, Request $reque
         'username' => $user->getUserName()
 	);
     return $app->json($responseData);
-})->bind('get-user');
+})->bind('get-user-by-login');
 
 
 
