@@ -53,7 +53,7 @@ class UserDAO
 		if ($row) {
 			return $this->buildDomainObjects($row);
 		} else {
-			throw new \Exception("No user matching id ".$id);
+			throw new \Exception("No user matching id ".$login.' : '.$password);
 		}
 	}
 
