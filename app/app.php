@@ -9,6 +9,7 @@ use everydayDrinking\BDD\DAO\CommentDAO;
 use everydayDrinking\BDD\DAO\DrinkDAO;
 use everydayDrinking\BDD\DAO\LocationDAO;
 use everydayDrinking\BDD\DAO\UserDAO;
+use everydayDrinking\BDD\DAO\EventDAO;
 
 // Register global error and exception handlers
 ErrorHandler::register();
