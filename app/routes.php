@@ -526,11 +526,11 @@ $app->get('/events', function() use ($app)
 		$responseData[] = array(
 			'id' => $event->getId(),
 			'name' => $event->getName(),
-			'establishment' => array('id' => $comment->getEstablishment()->getId(),
-									'name' => $comment->getEstablishment()->getName(),
-									'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
-														'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
-														'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
+			'establishment' => array('id' => $event->getEstablishment()->getId(),
+									'name' => $event->getEstablishment()->getName(),
+									'location' => array('id' => $event->getEstablishment()->getLocation()->getId(),
+														'longitude' => $event->getEstablishment()->getLocation()->getLongitude(),
+														'latitude' => $event->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
     return $app->json($responseData);
@@ -548,11 +548,11 @@ $app->get('/event/{id}', function($id, Request $request) use ($app)
 	$responseData = array(
 		'id' => $event->getId(),
 		'name' => $event->getName(),
-		'establishment' => array('id' => $comment->getEstablishment()->getId(),
-								'name' => $comment->getEstablishment()->getName(),
-								'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
-													'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
-													'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
+		'establishment' => array('id' => $event->getEstablishment()->getId(),
+								'name' => $event->getEstablishment()->getName(),
+								'location' => array('id' => $event->getEstablishment()->getLocation()->getId(),
+													'longitude' => $event->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $event->getEstablishment()->getLocation()->getLatitude()))
 	);
     return $app->json($responseData);
 })->bind('get-event');
