@@ -73,7 +73,7 @@ class EventDAO
 	{
 		$comment = new Comment();
 		$comment->setId($row['id']);
-		$comment->setComment($row['name']);
+		$comment->setName($row['name']);
         $comment->setEstablishment($row['establishment_id']);
 
 		return $comment;
