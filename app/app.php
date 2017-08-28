@@ -20,7 +20,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app['db.options'] = array(
         'driver' => 'pdo_mysql',
         'host' => 'localhost',
-        'port' => '8889',
+        'port' => '3306',
         'dbname' => 'everyday_drinking',
         'user' => 'root',
         'password' => 'root'
@@ -46,4 +46,9 @@ $app['dao.location'] = function ($app) {
 $app['dao.user'] = function ($app) {
     return new UserDAO($app['db']);
 };
+
+$app['dao.event'] = function ($app) {
+    return new EventDAO($app['db']);
+};
+
 

@@ -111,11 +111,15 @@ $app->get('/comments', function() use ($app)
     $comments = $app['dao.comment']->findAll();
     $responseData = array();
 	foreach ($comments as $comment) {
+		$comment->setUser($app['dao.user']->find($comment->getUser()));
 		$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 		$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
 		$responseData[] = array(
 			'id' => $comment->getId(),
-			'user' => $comment->getUser(),
+			'user' => array('id' => $comment->getUser()->getId(),
+							'login' => $comment->getUser()->getLogin(),
+							'password' => $comment->getUser()->getPassword(),
+            				'username' => $comment->getUser()->getUserName()),
 			'comment' => $comment->getComment(),
             'score' => $comment->getScore(),
             'establishment' => array('id' => $comment->getEstablishment()->getId(),
@@ -225,7 +229,7 @@ $app->get('/drinks', function() use ($app)
 	foreach ($drinks as $drink) {
 		$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
 		$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
-		$responseData = array(
+		$responseData[] = array(
 			'id' => $drink->getId(),
 			'name' => $drink->getName(),
 			'price' => $drink->getPrice(),
@@ -236,7 +240,7 @@ $app->get('/drinks', function() use ($app)
 														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
-    return $app->json($responseData);
+    return $app->json($responseData,202);
 })->bind('drinks');
 
 $app->get('/drink/{id}', function($id, Request $request) use ($app)
@@ -434,6 +438,24 @@ $app->get('/user/{id}', function($id, Request $request) use ($app)
     return $app->json($responseData);
 })->bind('get-user');
 
+$app->get('/user/{login}/{password}', function($login, $password, Request $request) use ($app)
+{
+    $user = $app['dao.user']->findByNameAndPassword($login, $password);
+	if(!isset($user)){
+		$app->abort(404, 'user not exist');
+	}
+    
+	$responseData = array(
+		'id' => $user->getId(),
+		'login' => $user->getLogin(),
+		'password' => $user->getPassword(),
+        'username' => $user->getUserName()
+	);
+    return $app->json($responseData);
+})->bind('get-user-by-login');
+
+
+
 $app->post('/user',function(Request $request) use ($app)
 {
 	if (!$request->request->has('login')) {
@@ -492,3 +514,82 @@ $app->delete('/user/{id}',function($id) use ($app)
 	return $app->json('No content', 204);
 
 })->bind('delete-user');
+
+$app->get('/events', function() use ($app)
+{
+	$responseData = array();
+    $event = $app['dao.event']->findAll();
+	foreach ($events as $event) {
+		$responseData[] = array(
+			'id' => $user->getId(),
+			'name' => $user->getName(),
+			'establishment' => $user->getEstablishment(),
+		);
+	}
+    return $app->json($responseData);
+})->bind('events');
+
+$app->get('/event/{id}', function($id, Request $request) use ($app)
+{
+    $user = $app['dao.event']->find($id);
+	if(!isset($event)){
+		$app->abort(404, 'event not exist');
+	}
+    
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment(),
+	);
+    return $app->json($responseData);
+})->bind('get-event');
+
+$app->post('/event',function(Request $request) use ($app)
+{
+	if (!$request->request->has('name')) {
+		return $app->json('Missing parameter: name', 400);
+	}
+	if(!$request->request->has('establishment')){
+		return $app->json('Missing parameter: establishment', 400);
+	}
+
+	$event = new Event();
+	$event->setName($request->request->get('name'));
+	$event->setEstablishment($request->request->get('establishment'));
+	$app['dao.event']->save($event);
+
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment()
+	);
+	return $app->json($responseData, 202);
+
+})->bind('post-event');
+
+$app->put('/event/{id}',function($id, Request $request) use ($app)
+{
+	$event = $app['dao.event']->find($id);
+	$event->setName($request->request->get('name'));
+	$event->setEstablishment($request->request->get('establishment'));
+	$app['dao.event']->save($event);
+
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment()
+	);
+
+	return $app->json($responseData, 202);
+	
+
+})->bind('put-event');
+
+$app->delete('/event/{id}',function($id) use ($app)
+{
+	$app['dao.event']->delete($id);
+
+	return $app->json('No content', 204);
+
+})->bind('delete-event');
+

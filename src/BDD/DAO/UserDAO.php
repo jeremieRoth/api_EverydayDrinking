@@ -45,6 +45,17 @@ class UserDAO
 			throw new \Exception("No user matching id ".$id);
 		}
 	}
+	public function findByNameAndPassword($login, $password)
+	{	
+		$sql = "SELECT * FROM user WHERE login=? AND password=?";
+		$row = $this->getDb()->fetchAssoc($sql, array($login,$password));
+
+		if ($row) {
+			return $this->buildDomainObjects($row);
+		} else {
+			throw new \Exception("No user matching id ".$login.' : '.$password);
+		}
+	}
 
 	public function save(User $user)
 	{
