@@ -521,10 +521,16 @@ $app->get('/events', function() use ($app)
 	$responseData = array();
     $events = $app['dao.event']->findAll();
 	foreach ($events as $event) {
+		$event->setEstablishment($app['dao.establishment']->find($event->getEstablishment()));
+		$event->getEstablishment()->setLocation($app['dao.location']->find($event->getEstablishment()->getLocation()));
 		$responseData[] = array(
 			'id' => $event->getId(),
 			'name' => $event->getName(),
-			'establishment' => $event->getEstablishment(),
+			'establishment' => array('id' => $comment->getEstablishment()->getId(),
+									'name' => $comment->getEstablishment()->getName(),
+									'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+														'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
+														'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
     return $app->json($responseData);
@@ -532,7 +538,9 @@ $app->get('/events', function() use ($app)
 
 $app->get('/event/{id}', function($id, Request $request) use ($app)
 {
-    $event = $app['dao.event']->find($id);
+	$event = $app['dao.event']->find($id);
+	$event->setEstablishment($app['dao.establishment']->find($event->getEstablishment()));
+	$event->getEstablishment()->setLocation($app['dao.location']->find($event->getEstablishment()->getLocation()));
 	if(!isset($event)){
 		$app->abort(404, 'event not exist');
 	}
@@ -540,7 +548,11 @@ $app->get('/event/{id}', function($id, Request $request) use ($app)
 	$responseData = array(
 		'id' => $event->getId(),
 		'name' => $event->getName(),
-		'establishment' => $event->getEstablishment(),
+		'establishment' => array('id' => $comment->getEstablishment()->getId(),
+								'name' => $comment->getEstablishment()->getName(),
+								'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+													'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 	);
     return $app->json($responseData);
 })->bind('get-event');
