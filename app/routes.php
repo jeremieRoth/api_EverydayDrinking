@@ -30,7 +30,7 @@ $app->get('/establishments', function() use ($app)
 			'id' => $establishment->getId(),
 			'name' => $establishment->getName(),
 			'location' => array('id' => $establishment->getLocation()->getId(),
-								'longitutde' => $establishment->getLocation()->getLongitude(),
+								'longitude' => $establishment->getLocation()->getLongitude(),
 								'latitude' => $establishment->getLocation()->getLatitude())
 		);
 	}
@@ -49,7 +49,7 @@ $app->get('/establishment/{id}', function($id, Request $request) use ($app)
 			'id' => $establishments->getId(),
 			'name' => $establishments->getName(),
 			'location' => array('id' => $establishments->getLocation()->getId(),
-								'longitutde' => $establishments->getLocation()->getLongitude(),
+								'longitude' => $establishments->getLocation()->getLongitude(),
 								'latitude' => $establishments->getLocation()->getLatitude())
 		);
     return $app->json($responseData) ;
@@ -121,7 +121,7 @@ $app->get('/comments', function() use ($app)
             'establishment' => array('id' => $comment->getEstablishment()->getId(),
 									 'name' => $comment->getEstablishment()->getName(),
 									 'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
-														 'longitutde' => $comment->getEstablishment()->getLocation()->getLongitude(),
+														 'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
 														 'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
@@ -145,7 +145,7 @@ $app->get('/comment/{id}', function($id, Request $request) use ($app)
             'establishment' => array('id' => $comment->getEstablishment()->getId(),
 									 'name' => $comment->getEstablishment()->getName(),
 									 'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
-														 'longitutde' => $comment->getEstablishment()->getLocation()->getLongitude(),
+														 'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
 														 'latitude' => $comment->getEstablishment()->getLocation()->getLatitude()))
 		);
     return $app->json($responseData);
@@ -232,7 +232,7 @@ $app->get('/drinks', function() use ($app)
             'establishment' => array('id' => $drink->getEstablishment()->getId(),
 									 'name' => $drink->getEstablishment()->getName(),
 									 'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
-														 'longitutde' => $drink->getEstablishment()->getLocation()->getLongitude(),
+														 'longitude' => $drink->getEstablishment()->getLocation()->getLongitude(),
 														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
 	}
@@ -255,7 +255,7 @@ $app->get('/drink/{id}', function($id, Request $request) use ($app)
             'establishment' => array('id' => $drink->getEstablishment()->getId(),
 									 'name' => $drink->getEstablishment()->getName(),
 									 'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
-														 'longitutde' => $drink->getEstablishment()->getLocation()->getLongitude(),
+														 'longitude' => $drink->getEstablishment()->getLocation()->getLongitude(),
 														 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 		);
     return $app->json($responseData);
