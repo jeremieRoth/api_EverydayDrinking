@@ -46,21 +46,21 @@ class EventDAO
 		}
 	}
 
-	public function save(Comment $comment)
+	public function save(Event $event)
 	{
 		$commentData = array(
-			'name' => $comment->getComment(),
-            'establishment_id' => $comment->getEstablishment()
+			'name' => $event->getComment(),
+            'establishment_id' => $event->getEstablishment()
 
 		);
 
 		// TODO CHECK
-		if ($comment->getId()) {
-			$this->getDb()->update('event', $commentData, array('id' => $comment->getId()));
+		if ($event->getId()) {
+			$this->getDb()->update('event', $eventData, array('id' => $event->getId()));
 		} else {
-			$this->getDb()->insert('event', $commentData);
+			$this->getDb()->insert('event', $eventData);
 			$id = $this->getDb()->lastInsertId();
-			$comment->setId($id);
+			$event->setId($id);
 		}
 	}
 
@@ -71,11 +71,11 @@ class EventDAO
 
 	protected function buildDomainObjects($row)
 	{
-		$comment = new Comment();
-		$comment->setId($row['id']);
-		$comment->setName($row['name']);
-        $comment->setEstablishment($row['establishment_id']);
+		$event = new Event();
+		$event->setId($row['id']);
+		$event->setName($row['name']);
+        $event->setEstablishment($row['establishment_id']);
 
-		return $comment;
+		return $event;
 	}
 }
