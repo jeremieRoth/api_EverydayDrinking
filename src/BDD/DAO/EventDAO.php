@@ -49,7 +49,7 @@ class EventDAO
 	public function save(Event $event)
 	{
 		$commentData = array(
-			'name' => $event->getComment(),
+			'name' => $event->getName(),
             'establishment_id' => $event->getEstablishment()
 
 		);
