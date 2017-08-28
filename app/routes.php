@@ -519,7 +519,7 @@ $app->delete('/user/{id}',function($id) use ($app)
 $app->get('/events', function() use ($app)
 {
 	$responseData = array();
-    $event = $app['dao.event']->findAll();
+    $events = $app['dao.event']->findAll();
 	foreach ($events as $event) {
 		$responseData[] = array(
 			'id' => $user->getId(),
