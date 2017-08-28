@@ -522,9 +522,9 @@ $app->get('/events', function() use ($app)
     $events = $app['dao.event']->findAll();
 	foreach ($events as $event) {
 		$responseData[] = array(
-			'id' => $user->getId(),
-			'name' => $user->getName(),
-			'establishment' => $user->getEstablishment(),
+			'id' => $event->getId(),
+			'name' => $event->getName(),
+			'establishment' => $event->getEstablishment(),
 		);
 	}
     return $app->json($responseData);
@@ -532,7 +532,7 @@ $app->get('/events', function() use ($app)
 
 $app->get('/event/{id}', function($id, Request $request) use ($app)
 {
-    $user = $app['dao.event']->find($id);
+    $event = $app['dao.event']->find($id);
 	if(!isset($event)){
 		$app->abort(404, 'event not exist');
 	}
