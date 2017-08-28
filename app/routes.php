@@ -8,6 +8,7 @@ use everydayDrinking\BDD\Entity\Drink;
 use everydayDrinking\BDD\Entity\Comment;
 use everydayDrinking\BDD\Entity\Location;
 use everydayDrinking\BDD\Entity\User;
+use everydayDrinking\BDD\Entity\Event;
 
 // Home page
 $app->get('/', function () use ($app) {
