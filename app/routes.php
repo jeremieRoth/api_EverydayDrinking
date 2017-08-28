@@ -514,3 +514,82 @@ $app->delete('/user/{id}',function($id) use ($app)
 	return $app->json('No content', 204);
 
 })->bind('delete-user');
+
+$app->get('/events', function() use ($app)
+{
+	$responseData = array();
+    $event = $app['dao.event']->findAll();
+	foreach ($events as $event) {
+		$responseData[] = array(
+			'id' => $user->getId(),
+			'name' => $user->getName(),
+			'establishment' => $user->getEstablishment(),
+		);
+	}
+    return $app->json($responseData);
+})->bind('events');
+
+$app->get('/event/{id}', function($id, Request $request) use ($app)
+{
+    $user = $app['dao.event']->find($id);
+	if(!isset($event)){
+		$app->abort(404, 'event not exist');
+	}
+    
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment(),
+	);
+    return $app->json($responseData);
+})->bind('get-event');
+
+$app->post('/event',function(Request $request) use ($app)
+{
+	if (!$request->request->has('name')) {
+		return $app->json('Missing parameter: name', 400);
+	}
+	if(!$request->request->has('establishment')){
+		return $app->json('Missing parameter: establishment', 400);
+	}
+
+	$event = new Event();
+	$event->setName($request->request->get('name'));
+	$event->setEstablishment($request->request->get('establishment'));
+	$app['dao.event']->save($event);
+
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment()
+	);
+	return $app->json($responseData, 202);
+
+})->bind('post-event');
+
+$app->put('/event/{id}',function($id, Request $request) use ($app)
+{
+	$event = $app['dao.event']->find($id);
+	$event->setName($request->request->get('name'));
+	$event->setEstablishment($request->request->get('establishment'));
+	$app['dao.event']->save($event);
+
+	$responseData = array(
+		'id' => $event->getId(),
+		'name' => $event->getName(),
+		'establishment' => $event->getEstablishment()
+	);
+
+	return $app->json($responseData, 202);
+	
+
+})->bind('put-event');
+
+$app->delete('/event/{id}',function($id) use ($app)
+{
+	$app['dao.event']->delete($id);
+
+	return $app->json('No content', 204);
+
+})->bind('delete-event');
+
