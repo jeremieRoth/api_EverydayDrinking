@@ -90,11 +90,14 @@ $app->put('/establishment/{id}',function($id, Request $request) use ($app)
 	$estblishment->setName($request->request->get('name'));
 	$estblishment->setLocation($request->request->get('location'));
 	$app['dao.establishment']->save($estblishment);
+	$establishments->setLocation($app['dao.location']->find($establishments->getLocation()));	
 
 	$responseData = array(
 		'id' => $estblishment->getId(),
 		'name' => $estblishment->getName(),
-		'location' => $estblishment->getLocation()
+		'location' => array('id' => $establishments->getLocation()->getId(),
+							'longitude' => $establishments->getLocation()->getLongitude(),
+							'latitude' => $establishments->getLocation()->getLatitude())
 	);
 
 	return $app->json($responseData, 202);
@@ -186,14 +189,20 @@ $app->post('/comment',function(Request $request) use ($app)
 	$comment->setScore($request->request->get('score'));
 	$comment->setEstablishment($request->request->get('establishment'));	
 	$app['dao.comment']->save($comment);
+	$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
+	$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
 
 	$responseData = array(
 		'id' => $comment->getId(),
 		'user' => $comment->getUser(),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
-        'establishment' => $comment->getEstablishment()
-	);
+        'establishment' => array('id' => $estblishment->getId(),
+								'name' => $estblishment->getName(),
+								'location' => array('id' => $establishments->getLocation()->getId(),
+													'longitude' => $establishments->getLocation()->getLongitude(),
+													'latitude' => $establishments->getLocation()->getLatitude())
+	));
 
 	return $app->json($responseData, 201);
 	$data = json_decode();
@@ -217,8 +226,12 @@ $app->put('/comment/{id}',function($id, Request $request) use ($app)
 		'user' => $comment->getUser(),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
-        'establishment' => $comment->getEstablishment()
-	);
+        'establishment' => array('id' => $estblishment->getId(),
+								'name' => $estblishment->getName(),
+								'location' => array('id' => $establishments->getLocation()->getId(),
+													'longitude' => $establishments->getLocation()->getLongitude(),
+													'latitude' => $establishments->getLocation()->getLatitude())
+));
 
 	return $app->json($responseData, 202);
 
@@ -292,14 +305,19 @@ $app->post('/drink',function(Request $request) use ($app)
 	$drink->setPrice($request->request->get('name'));
 	$drink->setEstablishment($request->request->get('establishment'));
 	$app['dao.drink']->save($drink);
+	$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
+	$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
 
 	$responseData = array(
 		'id' => $drink->getId(),
 		'name' => $drink->getName(),
 		'price' => $drink->getPrice(),
-        'establishment' => $drink->getEstablishment()
+        'establishment' => array('id' => $drink->getEstablishment()->getId(),
+								'name' => $drink->getEstablishment()->getName(),
+								'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
+													'longitude' => $drink->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
 	);
-
 	return $app->json($responseData, 201);
 	$data = json_decode();
 
@@ -315,13 +333,19 @@ $app->put('/drink/{id}',function($id, Request $request) use ($app)
 	$drink->setPrice($request->request->get('price'));
 	$drink->setEstablishment($request->request->get('establishment'));
 	$app['dao.drink']->save($drink);
+	$drink->setEstablishment($app['dao.establishment']->find($drink->getEstablishment()));
+	$drink->getEstablishment()->setLocation($app['dao.location']->find($drink->getEstablishment()->getLocation()));
 
 	$responseData = array(
 		'id' => $drink->getId(),
 		'name' => $drink->getName(),
 		'price' => $drink->getPrice(),
-        'establishment' => $drink->getEstablishment()
-	);
+        'establishment' => array('id' => $drink->getEstablishment()->getId(),
+								 'name' => $drink->getEstablishment()->getName(),
+								 'location' => array('id' => $drink->getEstablishment()->getLocation()->getId(),
+													 'longitude' => $drink->getEstablishment()->getLocation()->getLongitude(),
+													 'latitude' => $drink->getEstablishment()->getLocation()->getLatitude()))
+);
 
 	return $app->json($responseData, 202);
 
@@ -579,12 +603,18 @@ $app->post('/event',function(Request $request) use ($app)
 	$event->setName($request->request->get('name'));
 	$event->setEstablishment($request->request->get('establishment'));
 	$app['dao.event']->save($event);
+	$event->setEstablishment($app['dao.establishment']->find($event->getEstablishment()));
+	$event->getEstablishment()->setLocation($app['dao.location']->find($event->getEstablishment()->getLocation()));
 
 	$responseData = array(
 		'id' => $event->getId(),
 		'name' => $event->getName(),
-		'establishment' => $event->getEstablishment()
-	);
+		'establishment' => array('id' => $event->getEstablishment()->getId(),
+								'name' => $event->getEstablishment()->getName(),
+								'location' => array('id' => $event->getEstablishment()->getLocation()->getId(),
+													'longitude' => $event->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $event->getEstablishment()->getLocation()->getLatitude()))
+);
 	return $app->json($responseData, 202);
 
 })->bind('post-event');
@@ -595,11 +625,17 @@ $app->put('/event/{id}',function($id, Request $request) use ($app)
 	$event->setName($request->request->get('name'));
 	$event->setEstablishment($request->request->get('establishment'));
 	$app['dao.event']->save($event);
+	$event->setEstablishment($app['dao.establishment']->find($event->getEstablishment()));
+	$event->getEstablishment()->setLocation($app['dao.location']->find($event->getEstablishment()->getLocation()));
 
 	$responseData = array(
 		'id' => $event->getId(),
 		'name' => $event->getName(),
-		'establishment' => $event->getEstablishment()
+		'establishment' => array('id' => $event->getEstablishment()->getId(),
+								 'name' => $event->getEstablishment()->getName(),
+								 'location' => array('id' => $event->getEstablishment()->getLocation()->getId(),
+													 'longitude' => $event->getEstablishment()->getLocation()->getLongitude(),
+													 'latitude' => $event->getEstablishment()->getLocation()->getLatitude()))
 	);
 
 	return $app->json($responseData, 202);
