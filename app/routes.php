@@ -226,11 +226,11 @@ $app->put('/comment/{id}',function($id, Request $request) use ($app)
 		'user' => $comment->getUser(),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
-        'establishment' => array('id' => $estblishment->getId(),
-								'name' => $estblishment->getName(),
-								'location' => array('id' => $establishments->getLocation()->getId(),
-													'longitude' => $establishments->getLocation()->getLongitude(),
-													'latitude' => $establishments->getLocation()->getLatitude())
+        'establishment' => array('id' => $comment->getId(),
+								'name' => $comment->getName(),
+								'location' => array('id' => $comment->getLocation()->getId(),
+													'longitude' => $comment->getLocation()->getLongitude(),
+													'latitude' => $comment->getLocation()->getLatitude())
 ));
 
 	return $app->json($responseData, 202);
