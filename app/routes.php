@@ -197,11 +197,11 @@ $app->post('/comment',function(Request $request) use ($app)
 		'user' => $comment->getUser(),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
-        'establishment' => array('id' => $comment->getId(),
-								'name' => $comment->getName(),
-								'location' => array('id' => $comment->getLocation()->getId(),
-													'longitude' => $comment->getLocation()->getLongitude(),
-													'latitude' => $comment->getLocation()->getLatitude())
+        'establishment' => array('id' => $comment->getEstablishment()->getId(),
+								'name' => $comment->getEstablishment()->getName(),
+								'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+													'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $comment->getEstablishment()->getLocation()->getLatitude())
 	));
 
 	return $app->json($responseData, 201);
@@ -226,11 +226,11 @@ $app->put('/comment/{id}',function($id, Request $request) use ($app)
 		'user' => $comment->getUser(),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
-        'establishment' => array('id' => $comment->getId(),
-								'name' => $comment->getName(),
-								'location' => array('id' => $comment->getLocation()->getId(),
-													'longitude' => $comment->getLocation()->getLongitude(),
-													'latitude' => $comment->getLocation()->getLatitude())
+        'establishment' => array('id' => $comment->getEstablishment()->getId(),
+								'name' => $comment->getEstablishment()->getName(),
+								'location' => array('id' => $comment->getEstablishment()->getLocation()->getId(),
+													'longitude' => $comment->getEstablishment()->getLocation()->getLongitude(),
+													'latitude' => $comment->getEstablishment()->getLocation()->getLatitude())
 ));
 
 	return $app->json($responseData, 202);
