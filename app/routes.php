@@ -69,11 +69,14 @@ $app->post('/establishment',function(Request $request) use ($app)
 	$establishment->setName($request->request->get('name'));
 	$establishment->setLocation($request->request->get('location'));
 	$app['dao.establishment']->save($establishment);
+	$establishments->setLocation($app['dao.location']->find($establishments->getLocation()));
 
 	$responseData = array(
 		'id' => $establishment->getId(),
 		'name' => $establishment->getName(),
-		'location' => $establishment->getLocation()
+		'location' => array('id' => $establishments->getLocation()->getId(),
+							'longitude' => $establishments->getLocation()->getLongitude(),
+							'latitude' => $establishments->getLocation()->getLatitude())
 	);
 
 	return $app->json($responseData, 201);
@@ -155,6 +158,12 @@ $app->get('/comment/{id}', function($id, Request $request) use ($app)
 		);
     return $app->json($responseData);
 })->bind('get-comment');
+
+$app->get("commentByEstablishment/{establishment_id}"), function($establishment_id, Request $request) use($app)
+{
+
+
+}
 
 $app->post('/comment',function(Request $request) use ($app)
 {
