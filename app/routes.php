@@ -159,11 +159,11 @@ $app->get('/comment/{id}', function($id, Request $request) use ($app)
     return $app->json($responseData);
 })->bind('get-comment');
 
-$app->get("commentByEstablishment/{establishment_id}"), function($establishment_id, Request $request) use($app)
+/*$app->get("commentByEstablishment/{establishment_id}"), function($establishment_id, Request $request) use($app)
 {
 
 
-}
+}*/
 
 $app->post('/comment',function(Request $request) use ($app)
 {
