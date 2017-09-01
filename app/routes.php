@@ -69,14 +69,14 @@ $app->post('/establishment',function(Request $request) use ($app)
 	$establishment->setName($request->request->get('name'));
 	$establishment->setLocation($request->request->get('location'));
 	$app['dao.establishment']->save($establishment);
-	$establishments->setLocation($app['dao.location']->find($establishments->getLocation()));
+	$establishment->setLocation($app['dao.location']->find($establishment->getLocation()));
 
 	$responseData = array(
 		'id' => $establishment->getId(),
 		'name' => $establishment->getName(),
-		'location' => array('id' => $establishments->getLocation()->getId(),
-							'longitude' => $establishments->getLocation()->getLongitude(),
-							'latitude' => $establishments->getLocation()->getLatitude())
+		'location' => array('id' => $establishment->getLocation()->getId(),
+							'longitude' => $establishment->getLocation()->getLongitude(),
+							'latitude' => $establishment->getLocation()->getLatitude())
 	);
 
 	return $app->json($responseData, 201);
@@ -90,14 +90,14 @@ $app->put('/establishment/{id}',function($id, Request $request) use ($app)
 	$estblishment->setName($request->request->get('name'));
 	$estblishment->setLocation($request->request->get('location'));
 	$app['dao.establishment']->save($estblishment);
-	$establishments->setLocation($app['dao.location']->find($establishments->getLocation()));	
+	$establishment->setLocation($app['dao.location']->find($establishment->getLocation()));	
 
 	$responseData = array(
 		'id' => $estblishment->getId(),
 		'name' => $estblishment->getName(),
-		'location' => array('id' => $establishments->getLocation()->getId(),
-							'longitude' => $establishments->getLocation()->getLongitude(),
-							'latitude' => $establishments->getLocation()->getLatitude())
+		'location' => array('id' => $establishment->getLocation()->getId(),
+							'longitude' => $establishment->getLocation()->getLongitude(),
+							'latitude' => $establishment->getLocation()->getLatitude())
 	);
 
 	return $app->json($responseData, 202);
