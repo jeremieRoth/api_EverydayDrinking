@@ -194,7 +194,10 @@ $app->post('/comment',function(Request $request) use ($app)
 
 	$responseData = array(
 		'id' => $comment->getId(),
-		'user' => $comment->getUser(),
+		'user' => array('id' => $comment->getUser()->getId(),
+						'login' => $comment->getUser()->getLogin(),
+						'password' => $comment->getUser()->getPassword(),
+						'username' => $comment->getUser()->getUserName()),
 		'comment' => $comment->getComment(),
         'score' => $comment->getScore(),
         'establishment' => array('id' => $comment->getEstablishment()->getId(),
