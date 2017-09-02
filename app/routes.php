@@ -189,6 +189,7 @@ $app->post('/comment',function(Request $request) use ($app)
 	$comment->setScore($request->request->get('score'));
 	$comment->setEstablishment($request->request->get('establishment'));	
 	$app['dao.comment']->save($comment);
+	$comment->setUser($app['dao.user']->find($comment->getUser()));
 	$comment->setEstablishment($app['dao.establishment']->find($comment->getEstablishment()));
 	$comment->getEstablishment()->setLocation($app['dao.location']->find($comment->getEstablishment()->getLocation()));
 
